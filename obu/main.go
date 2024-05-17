@@ -3,25 +3,19 @@ package main
 import (
 	"fmt"
 	"log"
-	"math"
-	"math/rand/v2"
+	"math/rand"
 	"time"
 
+	"github.com/dr4g0n7ly/AutoTariff-Service/types"
 	"github.com/gorilla/websocket"
 )
 
 const wsEndpoint = "ws://127.0.0.1:30000/ws"
 
-var sendInterval = time.Second
-
-type OBUData struct {
-	OBUID int     `json:"obuID"`
-	Lat   float64 `json:"lat"`
-	Long  float64 `json:"long"`
-}
+var sendInterval = time.Second * 5
 
 func genCoord() float64 {
-	n := float64(rand.IntN(100) + 1)
+	n := float64(rand.Intn(100) + 1)
 	f := rand.Float64()
 	return n + f
 }
@@ -33,12 +27,13 @@ func genLocation() (float64, float64) {
 func genOBUs(n int) []int {
 	ids := make([]int, n)
 	for i := 0; i < n; i++ {
-		ids[i] = rand.IntN(math.MaxInt)
+		ids[i] = rand.Intn(99999)
 	}
 	return ids
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
 	conn, _, err := websocket.DefaultDialer.Dial(wsEndpoint, nil)
 	if err != nil {
 		log.Fatal(err)
@@ -46,7 +41,7 @@ func main() {
 	obuIDs := genOBUs(20)
 	for {
 		for i := 0; i < len(obuIDs); i++ {
-			data := OBUData{
+			data := types.OBUData{
 				OBUID: obuIDs[i],
 				Lat:   genCoord(),
 				Long:  genCoord(),

@@ -75,7 +75,7 @@ func (dr *DataReceiver) produceData(data OBUData) error {
 	err = dr.prod.Produce(&kafka.Message{
 		TopicPartition: kafka.TopicPartition{
 			Topic:     &kafkaTopic,
-			Partition: 1,
+			Partition: kafka.PartitionAny,
 		},
 		Value: b,
 	}, nil)

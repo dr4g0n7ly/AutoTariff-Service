@@ -18,14 +18,14 @@ func init() {
 
 func main() {
 	fmt.Println("starting server 0")
-  recv, err := NewDataReceiver()
-  if err != nil {
-	  print("fucked")
-	  log.Fatal(err)
+	recv, err := NewDataReceiver()
+	if err != nil {
+		print("fucked")
+		log.Fatal(err)
 	}
 	fmt.Println("starting server")
 	http.HandleFunc("/ws", recv.handleWS)
-  http.ListenAndServe(":30000", nil)
+	http.ListenAndServe(":30000", nil)
 }
 
 type DataReceiver struct {
@@ -43,6 +43,7 @@ type OBUData struct {
 func NewDataReceiver() (*DataReceiver, error) {
 	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost"})
 	if err != nil {
+		print("ERROR CREATING NEW PRODUCER")
 		return nil, err
 	}
 
@@ -68,6 +69,7 @@ func NewDataReceiver() (*DataReceiver, error) {
 func (dr *DataReceiver) produceData(data OBUData) error {
 	b, err := json.Marshal(data)
 	if err != nil {
+		print("ERROR PARSING DATA")
 		return err
 	}
 	err = dr.prod.Produce(&kafka.Message{

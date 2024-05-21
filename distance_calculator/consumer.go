@@ -33,6 +33,7 @@ func NewKafkaConsumer(topic string) (*KafkaConsumer, error) {
 
 func (c *KafkaConsumer) Start() {
 	logrus.Info("kafka transport started")
+	c.isRunning = true
 	c.readMessageLoop()
 }
 

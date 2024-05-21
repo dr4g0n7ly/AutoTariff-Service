@@ -57,6 +57,6 @@ func (c *KafkaConsumer) readMessageLoop() {
 			logrus.Errorf("JSON serialization error: %s", err)
 			continue
 		}
-		fmt.Println("distance %.2f", distance)
+		fmt.Printf("distance %.2f\n", distance)
 	}
 }

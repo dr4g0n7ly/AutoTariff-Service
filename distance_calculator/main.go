@@ -7,7 +7,8 @@ import (
 const kafkaTopic = "obudata"
 
 func main() {
-	kafkaConsumer, err := NewKafkaConsumer(kafkaTopic)
+	calcServ := NewCalculatorService()
+	kafkaConsumer, err := NewKafkaConsumer(kafkaTopic, calcServ)
 	if err != nil {
 		log.Fatal(err)
 	}

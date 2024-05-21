@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
 	"github.com/sirupsen/logrus"
@@ -39,7 +38,7 @@ func (c *KafkaConsumer) Start() {
 
 func (c *KafkaConsumer) readMessageLoop() {
 	for c.isRunning {
-		msg, err := c.consumer.ReadMessage(time.Second)
+		msg, err := c.consumer.ReadMessage(-1)
 		if err != nil {
 			logrus.Errorf("kafka consume error %s", err)
 			continue

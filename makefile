@@ -15,4 +15,4 @@ aggregator:
 	@./bin/aggregator
 
 
-.PHONY: obu, invoicer
+.PHONY: obu, aggregator

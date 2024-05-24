@@ -10,10 +10,6 @@ type Aggregator interface {
 	AggregateDistance(types.Distance) error
 }
 
-type Storer interface {
-	Insert(types.Distance) error
-}
-
 type InvoiceAggregator struct {
 	store Storer
 }

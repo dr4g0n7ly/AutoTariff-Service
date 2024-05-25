@@ -19,7 +19,7 @@ func (i *InvoiceAggregator) AggregateDistance(distance types.Distance) error {
 	return i.store.Insert(distance)
 }
 
-func NewInvoiceAggregator(store Storer) *InvoiceAggregator {
+func NewInvoiceAggregator(store Storer) Aggregator {
 	return &InvoiceAggregator{
 		store: store,
 	}

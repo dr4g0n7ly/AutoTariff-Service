@@ -2,8 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"time"
 
 	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/dr4g0n7ly/AutoTariff-Service/aggregator/client"
 	"github.com/dr4g0n7ly/AutoTariff-Service/types"
 	"github.com/sirupsen/logrus"
 )
@@ -12,9 +14,10 @@ type KafkaConsumer struct {
 	consumer    *kafka.Consumer
 	isRunning   bool
 	calcService CalculatorServicer
+	aggClient   *client.Client
 }
 
-func NewKafkaConsumer(topic string, calcServ CalculatorServicer) (*KafkaConsumer, error) {
+func NewKafkaConsumer(topic string, calcServ CalculatorServicer, aggClient *client.Client) (*KafkaConsumer, error) {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": "localhost",
 		"group.id":          "myGroup",
@@ -30,6 +33,7 @@ func NewKafkaConsumer(topic string, calcServ CalculatorServicer) (*KafkaConsumer
 	return &KafkaConsumer{
 		consumer:    c,
 		calcService: calcServ,
+		aggClient:   aggClient,
 	}, nil
 }
 
@@ -56,6 +60,14 @@ func (c *KafkaConsumer) readMessageLoop() {
 			logrus.Errorf("JSON serialization error: %s", err)
 			continue
 		}
-		_ = distance
+		req := types.Distance{
+			Distance: distance,
+			Unix:     time.Now().UnixNano(),
+			OBUID:    data.OBUID,
+		}
+		if err := c.aggClient.AggregateInvoice(req); err != nil {
+			logrus.Errorf("aggregate error: ", err)
+			continue
+		}
 	}
 }

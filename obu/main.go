@@ -35,7 +35,7 @@ func genOBUs(n int) []int {
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	conn, _, err := websocket.DefaultDialer.Dial(wsEndpoint, nil)
-  if err != nil {
+	if err != nil {
 		log.Fatal(err)
 	}
 	obuIDs := genOBUs(20)
@@ -47,9 +47,9 @@ func main() {
 				Long:  genCoord(),
 			}
 			fmt.Printf("%+v\n", data)
-      if err := conn.WriteJSON(data); err != nil {
-        log.Fatal(err)
-      } 
+			if err := conn.WriteJSON(data); err != nil {
+				log.Fatal(err)
+			}
 		}
 		time.Sleep(sendInterval)
 	}

@@ -12,7 +12,6 @@ import (
 func main() {
 	recv, err := NewDataReceiver()
 	if err != nil {
-		print("fucked")
 		log.Fatal(err)
 	}
 	fmt.Println("starting data receiver")

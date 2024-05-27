@@ -1,6 +1,10 @@
 package main
 
-import "github.com/dr4g0n7ly/AutoTariff-Service/types"
+import (
+	"context"
+
+	"github.com/dr4g0n7ly/AutoTariff-Service/types"
+)
 
 type AggregatorGRPCServer struct {
 	types.UnimplementedAggregatorServer
@@ -12,11 +16,11 @@ func NewAggregatorGRPCServer(svc Aggregator) *AggregatorGRPCServer {
 		svc: svc,
 	}
 }
-func (s *AggregatorGRPCServer) AggregateDistance(req *types.AggregateRequest) error {
+func (s *AggregatorGRPCServer) Aggregate(ctx context.Context, req *types.AggregateRequest) (*types.None, error) {
 	distance := types.Distance{
 		OBUID:    int(req.ObuID),
 		Distance: req.Distance,
 		Unix:     req.Unix,
 	}
-	return s.svc.AggregateDistance(distance)
+	return &types.None{}, s.svc.AggregateDistance(distance)
 }

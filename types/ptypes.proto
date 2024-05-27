@@ -2,7 +2,14 @@ syntax = "proto3";
 
 option go_package = "github.com/dr4g0n7ly/AutoTariff-Service/types";
 
-message Test {
-    int32 someint = 1;
-    int32 otherint = 2;
+service DistanceAggregator {
+    rpc AggregateDistance(DistanceAggregateRequest) returns (None);
+}
+
+message None {}
+
+message DistanceAggregateRequest {
+    int32 ObuID = 1;
+    double Value = 2;
+    int64 Unix = 3;
 }

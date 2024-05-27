@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option go_package = "github.com/dr4g0n7ly/AutoTariff-Service/types";
+
+message Test {
+    int32 someint = 1;
+    int32 otherint = 2;
+}

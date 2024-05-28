@@ -12,7 +12,14 @@ const aggregatorEndpoint = "http://127.0.0.1:3000/aggregate"
 func main() {
 	calcServ := NewCalculatorService()
 	calcServ = NewLogMiddleware(calcServ)
-	kafkaConsumer, err := NewKafkaConsumer(kafkaTopic, calcServ, client.NewHTTPClient(aggregatorEndpoint))
+
+	// httpClient := client.NewHTTPClient(aggregatorEndpoint)
+	grpcClient, err := client.NewGRPCClient(aggregatorEndpoint)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	kafkaConsumer, err := NewKafkaConsumer(kafkaTopic, calcServ, grpcClient)
 	if err != nil {
 		log.Fatal(err)
 	}

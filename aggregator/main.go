@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -9,9 +8,7 @@ import (
 	"net"
 	"net/http"
 	"strconv"
-	"time"
 
-	"github.com/dr4g0n7ly/AutoTariff-Service/aggregator/client"
 	"github.com/dr4g0n7ly/AutoTariff-Service/types"
 	"google.golang.org/grpc"
 )
@@ -28,20 +25,6 @@ func main() {
 	go func() {
 		log.Fatal(makeGRPCTransport(*grpcListenAddr, svc))
 	}()
-
-	time.Sleep(time.Second * 5)
-	c, err := client.NewGRPCClient(*grpcListenAddr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	if _, err := c.Aggregate(context.Background(), &types.AggregateRequest{
-		ObuID:    1,
-		Distance: 32.32,
-		Unix:     time.Now().UnixNano(),
-	}); err != nil {
-		log.Fatal(err)
-	}
-
 	log.Fatal(makeHTTPTransport(*httpListenAddr, svc))
 }
 
